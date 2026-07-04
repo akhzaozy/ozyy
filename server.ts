@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
-import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -19,25 +18,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 app.use("/uploads", express.static(UPLOADS_DIR));
 
-// Initialize AI if key is present
-let ai: GoogleGenAI | null = null;
-if (process.env.GEMINI_API_KEY) {
-  try {
-    ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        }
-      }
-    });
-    console.log("Gemini AI successfully initialized.");
-  } catch (error) {
-    console.error("Failed to initialize Gemini AI:", error);
-  }
-} else {
-  console.log("GEMINI_API_KEY not found in environment. AI features will degrade gracefully.");
-}
+// AI features removed (100% bebas api key publik)
 
 const DB_FILE = path.join(process.cwd(), "db.json");
 
@@ -84,7 +65,7 @@ interface DBStructure {
 const DEFAULT_PROFILE: UserProfile = {
   name: "Akhza Fachrozy",
   title: "Senior Fullstack Developer & Creative Architect",
-  bio: "Saya mendesain dan mengembangkan ekosistem web yang interaktif dengan micro-interactions responsif, database modular mandiri, dan integrasi AI cerdas.",
+  bio: "Saya mendesain dan mengembangkan ekosistem web yang interaktif dengan micro-interactions responsif.",
   avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop",
   githubUrl: "https://github.com/akhza",
   linkedinUrl: "https://linkedin.com/in/akhza",
@@ -312,62 +293,7 @@ app.delete("/api/blogs/:id", (req, res) => {
   res.json({ message: "Blog deleted successfully" });
 });
 
-// 5. Generate blog draft using Gemini
-app.post("/api/blogs/generate-ai", async (req, res) => {
-  const { topic, keywords } = req.body;
-  if (!topic) {
-    return res.status(400).json({ error: "Topic is required to generate blog draft" });
-  }
-
-  if (!ai) {
-    return res.status(503).json({ 
-      error: "Gemini AI features are not available because GEMINI_API_KEY is not configured in settings." 
-    });
-  }
-
-  try {
-    const prompt = `Buatkan artikel blog teknologi/portofolio profesional dalam bahasa Indonesia mengenai topik: "${topic}".
-    Kata kunci tambahan: ${keywords || "tidak ada"}.
-    Kembalikan output dalam format JSON murni dengan schema berikut:
-    {
-      "title": "Judul Blog yang menarik dan seo-friendly",
-      "summary": "Deskripsi singkat blog (1-2 kalimat)",
-      "content": "Isi blog lengkap ditulis dalam format Markdown, menggunakan heading, list, bold text, dan minimal 3-4 paragraf yang berbobot dan edukatif",
-      "tags": ["tag1", "tag2", "tag3"]
-    }`;
-
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            title: { type: Type.STRING },
-            summary: { type: Type.STRING },
-            content: { type: Type.STRING },
-            tags: {
-              type: Type.ARRAY,
-              items: { type: Type.STRING }
-            }
-          },
-          required: ["title", "summary", "content", "tags"]
-        }
-      }
-    });
-
-    if (!response.text) {
-      throw new Error("Empty response from Gemini AI");
-    }
-
-    const blogDraft = JSON.parse(response.text.trim());
-    res.json(blogDraft);
-  } catch (error: any) {
-    console.error("AI Blog Generation Error:", error);
-    res.status(500).json({ error: "Failed to generate blog using AI: " + error.message });
-  }
-});
+// 5. Generate blog draft endpoint removed (100% bebas api key publik)
 
 // 6. Get all contact messages (Admin Dashboard)
 app.get("/api/contacts", (req, res) => {
@@ -397,49 +323,7 @@ app.post("/api/contacts", async (req, res) => {
     createdAt: new Date().toISOString()
   };
 
-  // Perform Gemini analysis asynchronously if AI is available to speed up response
-  if (ai) {
-    try {
-      const aiPrompt = `Seseorang bernama ${name} (${email}) mengirim pesan kontak melalui website portofolio Anda.
-      Subjek: "${subject || 'Tanpa Subjek'}"
-      Pesan: "${message}"
-
-      Tugas Anda:
-      1. Tentukan kategori sentimen/prioritas pesan (pilih satu dari: "Sangat Penting", "Kolaborasi Bisnis", "Tanya Jawab", "Apresiasi", "Perekrutan").
-      2. Buatkan draf balasan email balasan bahasa Indonesia yang sangat sopan, profesional, hangat, dan berbobot dari perspektif pemilik portofolio (Akhza Fachrozy, Fullstack Developer & Designer). Berterimakasih atas ketertarikan mereka, respon isinya secara cerdas, dan tawarkan kelanjutan diskusi.
-
-      Kembalikan respon dalam JSON murni dengan schema:
-      {
-        "sentiment": "Kategori Sentimen yang dipilih",
-        "responseDraft": "Draf balasan email lengkap"
-      }`;
-
-      // We wait briefly to enrich the object
-      const aiResponse = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: aiPrompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              sentiment: { type: Type.STRING },
-              responseDraft: { type: Type.STRING }
-            },
-            required: ["sentiment", "responseDraft"]
-          }
-        }
-      });
-
-      if (aiResponse.text) {
-        const aiAnalysis = JSON.parse(aiResponse.text.trim());
-        newMessage.sentiment = aiAnalysis.sentiment;
-        newMessage.responseDraft = aiAnalysis.responseDraft;
-      }
-    } catch (aiErr) {
-      console.error("Failed to generate AI response draft for contact:", aiErr);
-    }
-  }
+  // AI analysis removed
 
   db.contacts.push(newMessage);
   writeDb(db);

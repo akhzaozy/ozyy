@@ -17,7 +17,7 @@ export default function App() {
   const [profile, setProfile] = useState<UserProfile>({
     name: "Akhza Fachrozy",
     title: "Senior Fullstack Developer & Creative Architect",
-    bio: "Saya mendesain dan mengembangkan ekosistem web yang interaktif dengan micro-interactions responsif, database modular mandiri, dan integrasi AI cerdas.",
+    bio: "Saya mendesain dan mengembangkan ekosistem web yang interaktif dengan micro-interactions responsif.",
     avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop",
     githubUrl: "https://github.com/akhza",
     linkedinUrl: "https://linkedin.com/in/akhza",
@@ -193,7 +193,6 @@ export default function App() {
               </div>
               <div>
                 <span className="block font-bold text-slate-300">{profile.name} © 2026</span>
-                <span className="text-[10px] text-slate-500 font-mono">Bebas Dependensi Cloud Eksternal</span>
               </div>
             </div>
 

@@ -262,14 +262,7 @@ export default function HeroSection({ setActiveTab, profile }: HeroSectionProps)
 
                 </div>
 
-                {/* Elegant metrics banner at bottom */}
-                <div className="mt-6 pt-5 border-t border-slate-900 flex justify-between items-center text-xs font-mono">
-                  <div className="flex items-center gap-1.5 text-slate-400">
-                    <Code size={13} className="text-sky-400" />
-                    <span>Lokal DB Mandiri</span>
-                  </div>
-                  <span className="text-emerald-400 font-semibold">100% Bebas API Key Publik</span>
-                </div>
+                {/* Metrics banner removed based on request */}
 
               </motion.div>
             </div>

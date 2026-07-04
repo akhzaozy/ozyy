@@ -71,7 +71,7 @@ export default function ContactHub({ profile }: ContactHubProps) {
             Mari Berkolaborasi!
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto text-sm">
-            Kirimkan pesan Anda secara langsung. Setiap pesan akan tersimpan aman di database lokal backend saya dan dianalisis otomatis dengan Gemini AI.
+            Kirimkan pesan Anda secara langsung. Setiap pesan akan tersimpan aman dan saya akan segera meresponsnya secepat mungkin.
           </p>
         </div>
 
@@ -93,8 +93,8 @@ export default function ContactHub({ profile }: ContactHubProps) {
                     <Sparkles size={16} />
                   </div>
                   <div>
-                    <h4 className="font-display font-semibold text-white text-sm">AI-Powered Inbox</h4>
-                    <p className="text-slate-400 text-xs mt-0.5">Analisis sentimen dan penyusunan draf respons otomatis bertenaga Gemini AI.</p>
+                    <h4 className="font-display font-semibold text-white text-sm">Respon Cepat</h4>
+                    <p className="text-slate-400 text-xs mt-0.5">Saya selalu berusaha memberikan balasan yang solutif dalam waktu kurang dari 24 jam.</p>
                   </div>
                 </div>
 
@@ -157,7 +157,7 @@ export default function ContactHub({ profile }: ContactHubProps) {
                       </p>
                     </div>
                     <p className="text-xs text-indigo-400 font-mono">
-                      ✨ Sistem AI di backend telah selesai merancang analisis sentimen & draf email balasan untuk Anda! Anda bisa mengeceknya di Admin Hub.
+                      ✨ Pesan Anda telah masuk ke sistem saya. Saya akan segera menghubungi Anda kembali!
                     </p>
                     <button
                       id="contact-reset-btn"

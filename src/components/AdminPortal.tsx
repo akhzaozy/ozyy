@@ -36,12 +36,6 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
     author: 'Akhza Fachrozy'
   });
 
-  // AI Generation State
-  const [aiTopic, setAiTopic] = useState('');
-  const [aiKeywords, setAiKeywords] = useState('');
-  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
-  const [aiError, setAiError] = useState('');
-
   // Profile Form state
   const [profileForm, setProfileForm] = useState({
     name: '',
@@ -192,49 +186,6 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
       onRefreshBlogs();
     }
   }, [isLocked]);
-
-  // AI Blog Draft Generator handler
-  const handleGenerateAiBlog = async () => {
-    if (!aiTopic) {
-      setAiError('Silakan masukkan topik tulisan terlebih dahulu.');
-      return;
-    }
-
-    setIsGeneratingAi(true);
-    setAiError('');
-
-    try {
-      const res = await fetch('/api/blogs/generate-ai', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ topic: aiTopic, keywords: aiKeywords })
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Gagal menghasilkan konten draf.');
-      }
-
-      // Populate form fields with the generated draft
-      setBlogFormData({
-        title: data.title || '',
-        summary: data.summary || '',
-        content: data.content || '',
-        tags: Array.isArray(data.tags) ? data.tags.join(', ') : 'Teknologi',
-        coverImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&auto=format&fit=crop', // default cool tech image
-        author: 'Akhza Fachrozy'
-      });
-
-      setIsCreatingBlog(true);
-      setAiTopic('');
-      setAiKeywords('');
-    } catch (err: any) {
-      console.error(err);
-      setAiError(err.message || 'Gagal terhubung dengan server/Gemini API.');
-    } finally {
-      setIsGeneratingAi(false);
-    }
-  };
 
   // Create Blog submit handler
   const handleBlogSubmit = async (e: React.FormEvent) => {
@@ -465,78 +416,16 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
               
               {!isCreatingBlog ? (
                 <>
-                  {/* AI Quick Generator Box */}
-                  <div className="bg-gradient-to-r from-indigo-950/40 via-slate-950 to-sky-950/30 p-6 rounded-2xl border border-indigo-500/20 space-y-4">
-                    <div className="flex items-center gap-2 text-indigo-400">
-                      <Sparkles size={18} className="animate-pulse" />
-                      <h3 className="font-display font-bold text-white text-md">AI Blog Draft Assistant (Bertenaga Gemini)</h3>
-                    </div>
-                    <p className="text-slate-400 text-xs">
-                      Tulis topik tulisan teknologi yang Anda inginkan, asisten Gemini kami akan secara instan menyusun judul, deskripsi, tag, dan isi artikel Markdown siap terbit secara otomatis dalam bahasa Indonesia!
-                    </p>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label htmlFor="ai-topic" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Topik Artikel *</label>
-                        <input
-                          id="ai-topic"
-                          type="text"
-                          placeholder="Contoh: Mengapa CSS Grid menggeser Flexbox"
-                          value={aiTopic}
-                          onChange={(e) => setAiTopic(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3.5 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label htmlFor="ai-keywords" className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Kata Kunci Tambahan (Opsional)</label>
-                        <input
-                          id="ai-keywords"
-                          type="text"
-                          placeholder="Contoh: responsif, tata letak, modern"
-                          value={aiKeywords}
-                          onChange={(e) => setAiKeywords(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-xl py-2 px-3.5 text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
-
-                    {aiError && (
-                      <div className="flex items-center gap-2 text-rose-400 text-xs font-mono">
-                        <AlertCircle size={14} />
-                        <span>{aiError}</span>
-                      </div>
-                    )}
-
-                    <div className="flex items-center justify-between gap-4 pt-2 border-t border-slate-900">
+                  <div className="flex justify-end pt-2 border-t border-slate-900">
                       <button
                         id="admin-new-blog-manual-btn"
                         onClick={() => setIsCreatingBlog(true)}
                         className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
                       >
                         <Plus size={14} />
-                        <span>Tulis Manual</span>
-                      </button>
-
-                      <button
-                        id="admin-ai-generate-btn"
-                        onClick={handleGenerateAiBlog}
-                        disabled={isGeneratingAi}
-                        className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-sky-600 hover:from-indigo-500 hover:to-sky-500 disabled:from-indigo-800 text-white rounded-xl text-xs font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/10"
-                      >
-                        {isGeneratingAi ? (
-                          <>
-                            <span className="w-3.5 h-3.5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                            <span>Menyusun Artikel...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles size={14} />
-                            <span>Buat Draf dengan AI</span>
-                          </>
-                        )}
+                        <span>Tulis Artikel Baru</span>
                       </button>
                     </div>
-                  </div>
 
                   {/* List of current blogs */}
                   <div className="bg-slate-950/40 border border-slate-800/80 rounded-2xl overflow-hidden">
