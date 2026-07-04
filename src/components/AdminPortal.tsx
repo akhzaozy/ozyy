@@ -352,8 +352,8 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
               <input
                 id="pin-input"
                 type="password"
-                placeholder="• • • •"
-                maxLength={4}
+                placeholder="• • • • • •"
+                maxLength={6}
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 text-center text-lg font-bold tracking-widest text-white focus:outline-none focus:border-indigo-500 transition-colors"
