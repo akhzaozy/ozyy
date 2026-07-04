@@ -1,0 +1,44 @@
+{
+  "blogs": [
+    {
+      "id": "blog-1",
+      "title": "Seni Tipografi Swiss dalam UI Modern",
+      "summary": "Bagaimana prinsip keteraturan, kesederhanaan, dan grid dari tipografi Swiss membentuk antarmuka digital terbaik hari ini.",
+      "content": "## Mengapa Tipografi Swiss Begitu Relevan?\n\nDesain Swiss, atau dikenal sebagai **International Typographic Style**, lahir pada tahun 1950-an. Namun prinsip utamanya—keterbacaan yang tinggi, objektivitas, dan keteraturan struktural—tetap menjadi landasan bagi perancang antarmuka (UI) modern.\n\n### Karakteristik Utama Desain Swiss:\n1. **Asymmetric Layouts**: Menolak tata letak simetris kaku demi komposisi dinamis yang dipandu oleh konten.\n2. **The Grid System**: Setiap elemen diletakkan dengan perhitungan matematis yang harmonis.\n3. **Sans-Serif Typography**: Penggunaan font seperti *Helvetica* atau *Inter* untuk menyampaikan pesan sejelas mungkin tanpa ornamen berlebih.\n\n> \"Desain bukan hanya penampilan, melainkan bagaimana sesuatu bekerja.\" — Steve Jobs\n\nDalam dunia di mana rentang perhatian pengguna semakin pendek, kesederhanaan Swiss membantu mengurangi kognitif load, membuat konten menjadi bintang utama dari antarmuka Anda.",
+      "tags": [
+        "Desain",
+        "Tipografi",
+        "Prinsip UI"
+      ],
+      "coverImage": "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?q=80&w=1000&auto=format&fit=crop",
+      "author": "Akhza Fachrozy",
+      "date": "2026-07-01",
+      "createdAt": "2026-07-01T08:00:00.000Z"
+    },
+    {
+      "id": "blog-2",
+      "title": "Menguasai Animasi Mikro di React",
+      "summary": "Memanfaatkan motion dan transisi halus untuk memandu navigasi pengguna tanpa mengurangi performa aplikasi web.",
+      "content": "## Mengapa Animasi Mikro Itu Penting?\n\nAnimasi mikro (*micro-interactions*) adalah transisi kecil yang memandu perhatian pengguna, memberikan feedback visual langsung, dan membuat aplikasi terasa hidup. \n\n### Kapan Harus Menggunakan Animasi?\n- **Feedback Masukan**: Tombol yang memantul sedikit saat ditekan.\n- **Transisi Halaman**: Transisi fade atau slide lembut untuk menghindari perpindahan kaku.\n- **Penunjuk Arah**: Menu drop-down yang meluncur halus mengindikasikan asal elemen tersebut.\n\n### Menggunakan Framer Motion (Motion) secara Efektif\n\nDengan library seperti `motion`, kita dapat membuat animasi yang dinamis dengan kode minimal:\n\n```tsx\nimport { motion } from \"motion/react\";\n\nexport function BounceButton() {\n  return (\n    <motion.button\n      whileHover={{ scale: 1.05 }}\n      whileTap={{ scale: 0.95 }}\n      className=\"px-4 py-2 bg-indigo-600 text-white rounded\"\n    >\n      Klik Saya\n    </motion.button>\n  );\n}\n```\n\nHindari animasi berlebihan. Animasi terbaik adalah animasi yang tidak disadari secara sadar oleh pengguna, namun membuat pengalaman navigasi terasa sangat menyenangkan dan mulus.",
+      "tags": [
+        "React",
+        "Animasi",
+        "Framer Motion"
+      ],
+      "coverImage": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop",
+      "author": "Akhza Fachrozy",
+      "date": "2026-07-03",
+      "createdAt": "2026-07-03T10:00:00.000Z"
+    }
+  ],
+  "contacts": [],
+  "profile": {
+    "name": "Akhza Fachrozy",
+    "title": "Senior Fullstack Developer & Creative Architect",
+    "bio": "Saya mendesain dan mengembangkan ekosistem web yang interaktif dengan micro-interactions responsif, database modular mandiri, dan integrasi AI cerdas.",
+    "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop",
+    "githubUrl": "https://github.com/akhza",
+    "linkedinUrl": "https://linkedin.com/in/akhza",
+    "email": "akhza.04@gmail.com"
+  }
+}
