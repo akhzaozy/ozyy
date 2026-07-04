@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Navigation from './components/Navigation';
 import HeroSection from './components/HeroSection';
@@ -26,6 +26,7 @@ export default function App() {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [blogsLoading, setBlogsLoading] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   // Fetch blogs from server
   const fetchBlogs = async () => {
@@ -65,10 +66,9 @@ export default function App() {
     };
     
     const handleMouseMove = (e: MouseEvent) => {
-      const root = document.getElementById('app-root');
-      if (root) {
-        root.style.setProperty('--mouse-x', `${e.clientX}px`);
-        root.style.setProperty('--mouse-y', `${e.clientY}px`);
+      if (cursorRef.current) {
+        cursorRef.current.style.setProperty('--mouse-x', `${e.clientX}px`);
+        cursorRef.current.style.setProperty('--mouse-y', `${e.clientY}px`);
       }
     };
 
@@ -103,6 +103,7 @@ export default function App() {
       
       {/* High-Performance Interactive Cursor Spotlight Tracker */}
       <div 
+        ref={cursorRef}
         className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500 opacity-60 hidden sm:block"
         style={{
           background: `radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(99, 102, 241, 0.08), transparent 80%)`

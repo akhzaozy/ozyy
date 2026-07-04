@@ -62,7 +62,6 @@ export default function BackgroundAnimation() {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            boxShadow: p.size > 2 ? '0 0 8px rgba(129, 140, 248, 0.8)' : 'none',
           }}
           animate={{
             opacity: [0.2, 1, 0.2],
@@ -139,7 +138,7 @@ export default function BackgroundAnimation() {
           strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="w-8 h-8 drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+          className="w-8 h-8 text-emerald-400"
         >
           {/* Futuristic paper airplane / origami glider design */}
           <path d="M22 2L2 9l9.5 2.5L14 21l8-19z" />
@@ -174,7 +173,7 @@ export default function BackgroundAnimation() {
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
-          className="w-6 h-6 drop-shadow-[0_0_10px_rgba(99,102,241,0.2)]"
+          className="w-6 h-6 text-indigo-400"
         >
           {/* Drone/Satellite shaped outline */}
           <circle cx="12" cy="12" r="4" />
