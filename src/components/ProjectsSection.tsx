@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PROJECTS } from '../data';
 import { 
   FolderGit2, ExternalLink, Github, Code, Sparkles, X, 
   Terminal, Cpu, Database, Check, Play, Zap 
@@ -12,12 +11,20 @@ export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [testingLatency, setTestingLatency] = useState(false);
   const [latencyResult, setLatencyResult] = useState<string | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    fetch('/api/projects')
+      .then(res => res.json())
+      .then(data => setProjects(data))
+      .catch(err => console.error(err));
+  }, []);
 
   const filters = ['all', 'Web', 'System', 'AI Tool'];
 
   const filteredProjects = activeFilter === 'all'
-    ? PROJECTS
-    : PROJECTS.filter(p => p.category === activeFilter);
+    ? projects
+    : projects.filter(p => p.category === activeFilter);
 
   // Simulated latency test for each project
   const triggerLatencyTest = () => {

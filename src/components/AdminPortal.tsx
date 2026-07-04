@@ -5,8 +5,10 @@ import {
   Lock, Unlock, Sparkles, Trash2, Plus, 
   Mail, BookOpen, Edit, Copy, Check, 
   CheckSquare, Calendar, AlertCircle, Eye, EyeOff,
-  User, Settings, Upload
+  User, Settings, Upload, Terminal, FolderGit2
 } from 'lucide-react';
+import AdminSkills from './AdminSkills';
+import AdminProjects from './AdminProjects';
 
 interface AdminPortalProps {
   blogs: BlogPost[];
@@ -19,7 +21,7 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
   const [isLocked, setIsLocked] = useState(true);
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState(false);
-  const [activeSubTab, setActiveSubTab] = useState<'blogs' | 'contacts' | 'profile'>('blogs');
+  const [activeSubTab, setActiveSubTab] = useState<'blogs' | 'contacts' | 'profile' | 'skills' | 'projects'>('blogs');
   
   // Contacts State
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
@@ -44,7 +46,11 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
     avatarUrl: '',
     githubUrl: '',
     linkedinUrl: '',
-    email: ''
+    email: '',
+    heroTitle: '',
+    heroSubtitle: '',
+    contactTitle: '',
+    contactSubtitle: ''
   });
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileSuccessMsg, setProfileSuccessMsg] = useState('');
@@ -120,7 +126,11 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
         avatarUrl: profile.avatarUrl || '',
         githubUrl: profile.githubUrl || '',
         linkedinUrl: profile.linkedinUrl || '',
-        email: profile.email || ''
+        email: profile.email || '',
+        heroTitle: profile.heroTitle || '',
+        heroSubtitle: profile.heroSubtitle || '',
+        contactTitle: profile.contactTitle || '',
+        contactSubtitle: profile.contactSubtitle || ''
       });
     }
   }, [profile]);
@@ -403,7 +413,31 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
             }`}
           >
             <User size={16} />
-            <span>Pengaturan Profil</span>
+            <span>Pengaturan Profil & Teks</span>
+          </button>
+          <button
+            id="admin-tab-skills"
+            onClick={() => setActiveSubTab('skills')}
+            className={`px-5 py-3 text-sm font-semibold transition-all border-b-2 flex items-center gap-2 ${
+              activeSubTab === 'skills'
+                ? 'border-indigo-500 text-indigo-400 font-bold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Terminal size={16} />
+            <span>Keahlian</span>
+          </button>
+          <button
+            id="admin-tab-projects"
+            onClick={() => setActiveSubTab('projects')}
+            className={`px-5 py-3 text-sm font-semibold transition-all border-b-2 flex items-center gap-2 ${
+              activeSubTab === 'projects'
+                ? 'border-indigo-500 text-indigo-400 font-bold'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <FolderGit2 size={16} />
+            <span>Proyek</span>
           </button>
         </div>
 
@@ -868,6 +902,53 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
                       className="w-full px-4 py-3 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-indigo-500 text-slate-100 rounded-xl text-sm focus:outline-none transition-all"
                     />
                   </div>
+
+                  {/* Pengaturan Teks Beranda & Kontak */}
+                  <div className="space-y-4 md:col-span-2 pt-6 border-t border-slate-800">
+                    <h4 className="font-display font-bold text-white text-md">Pengaturan Teks Global (Beranda & Kontak)</h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-mono text-slate-400 font-bold uppercase">Judul Utama Beranda</label>
+                        <input
+                          type="text"
+                          value={profileForm.heroTitle}
+                          onChange={(e) => setProfileForm({ ...profileForm, heroTitle: e.target.value })}
+                          className="w-full px-4 py-3 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-indigo-500 text-slate-100 rounded-xl text-sm focus:outline-none transition-all"
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-mono text-slate-400 font-bold uppercase">Sub-Judul Beranda</label>
+                        <input
+                          type="text"
+                          value={profileForm.heroSubtitle}
+                          onChange={(e) => setProfileForm({ ...profileForm, heroSubtitle: e.target.value })}
+                          className="w-full px-4 py-3 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-indigo-500 text-slate-100 rounded-xl text-sm focus:outline-none transition-all"
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-mono text-slate-400 font-bold uppercase">Judul Kontak</label>
+                        <input
+                          type="text"
+                          value={profileForm.contactTitle}
+                          onChange={(e) => setProfileForm({ ...profileForm, contactTitle: e.target.value })}
+                          className="w-full px-4 py-3 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-indigo-500 text-slate-100 rounded-xl text-sm focus:outline-none transition-all"
+                        />
+                      </div>
+                      
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-mono text-slate-400 font-bold uppercase">Deskripsi Kontak</label>
+                        <textarea
+                          value={profileForm.contactSubtitle}
+                          onChange={(e) => setProfileForm({ ...profileForm, contactSubtitle: e.target.value })}
+                          rows={2}
+                          className="w-full px-4 py-3 bg-slate-950 border border-slate-800 hover:border-slate-700 focus:border-indigo-500 text-slate-100 rounded-xl text-sm focus:outline-none transition-all resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex justify-end pt-4 border-t border-slate-800/80">
@@ -880,6 +961,20 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
                   </button>
                 </div>
               </form>
+            </motion.div>
+          )}
+
+          {/* 4. SKILLS MANAGEMENT */}
+          {activeSubTab === 'skills' && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 sm:p-8">
+              <AdminSkills />
+            </motion.div>
+          )}
+
+          {/* 5. PROJECTS MANAGEMENT */}
+          {activeSubTab === 'projects' && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 sm:p-8">
+              <AdminProjects />
             </motion.div>
           )}
 

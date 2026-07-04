@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { SKILLS } from '../data';
+import { Skill } from '../types';
 import { 
   Code, Shield, Palette, Server, Database, Sparkles, 
   Compass, GitBranch, Terminal, Layout, Wrench, ChevronRight 
@@ -50,6 +50,14 @@ const getCodeSnippet = (name: string) => {
 export default function SkillsSection() {
   const [activeFilter, setActiveFilter] = useState<'all' | 'frontend' | 'backend' | 'design' | 'tools'>('all');
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [skills, setSkills] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    fetch('/api/skills')
+      .then(res => res.json())
+      .then(data => setSkills(data))
+      .catch(err => console.error(err));
+  }, []);
 
   const categories = [
     { id: 'all', label: 'Semua', icon: Layout },
@@ -60,8 +68,8 @@ export default function SkillsSection() {
   ];
 
   const filteredSkills = activeFilter === 'all' 
-    ? SKILLS 
-    : SKILLS.filter(skill => skill.category === activeFilter);
+    ? skills 
+    : skills.filter(skill => skill.category === activeFilter);
 
   return (
     <section id="skills" className="py-24 relative overflow-hidden">

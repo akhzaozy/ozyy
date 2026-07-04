@@ -3,8 +3,8 @@ import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
-
-dotenv.config();
+import { SKILLS, PROJECTS } from "./src/data";
+import { Skill, Project } from "./src/types";
 
 const app = express();
 const PORT = 3000;
@@ -60,6 +60,8 @@ interface DBStructure {
   blogs: BlogPost[];
   contacts: ContactMessage[];
   profile?: UserProfile;
+  skills: Skill[];
+  projects: Project[];
 }
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -69,7 +71,11 @@ const DEFAULT_PROFILE: UserProfile = {
   avatarUrl: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop",
   githubUrl: "https://github.com/akhza",
   linkedinUrl: "https://linkedin.com/in/akhza",
-  email: "akhza.04@gmail.com"
+  email: "akhza.04@gmail.com",
+  heroTitle: "Membangun Karya Digital",
+  heroSubtitle: "Melalui Arsitektur Semantik & Animasi Mikro Presisi.",
+  contactTitle: "Mari Berkolaborasi!",
+  contactSubtitle: "Kirimkan pesan Anda secara langsung. Setiap pesan akan tersimpan aman dan saya akan segera meresponsnya secepat mungkin."
 };
 
 const INITIAL_BLOGS: BlogPost[] = [
@@ -140,7 +146,7 @@ Hindari animasi berlebihan. Animasi terbaik adalah animasi yang tidak disadari s
 function readDb(): DBStructure {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      const initialDb: DBStructure = { blogs: INITIAL_BLOGS, contacts: [], profile: DEFAULT_PROFILE };
+      const initialDb: DBStructure = { blogs: INITIAL_BLOGS, contacts: [], profile: DEFAULT_PROFILE, skills: SKILLS, projects: PROJECTS };
       fs.writeFileSync(DB_FILE, JSON.stringify(initialDb, null, 2), "utf-8");
       return initialDb;
     }
@@ -148,8 +154,10 @@ function readDb(): DBStructure {
     const db: DBStructure = JSON.parse(data);
     if (!db.profile) {
       db.profile = DEFAULT_PROFILE;
-      fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), "utf-8");
     }
+    if (!db.skills) db.skills = SKILLS;
+    if (!db.projects) db.projects = PROJECTS;
+    fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2), "utf-8");
     return db;
   } catch (err) {
     console.error("Error reading database file:", err);
@@ -206,9 +214,10 @@ app.get("/api/profile", (req, res) => {
 
 // 0.1 Update user profile
 app.put("/api/profile", (req, res) => {
-  const { name, title, bio, avatarUrl, githubUrl, linkedinUrl, email } = req.body;
+  const { name, title, bio, avatarUrl, githubUrl, linkedinUrl, email, heroTitle, heroSubtitle, contactTitle, contactSubtitle } = req.body;
   const db = readDb();
   db.profile = {
+    ...db.profile,
     name: name || db.profile?.name || DEFAULT_PROFILE.name,
     title: title || db.profile?.title || DEFAULT_PROFILE.title,
     bio: bio || db.profile?.bio || DEFAULT_PROFILE.bio,
@@ -216,6 +225,10 @@ app.put("/api/profile", (req, res) => {
     githubUrl: githubUrl || db.profile?.githubUrl || DEFAULT_PROFILE.githubUrl,
     linkedinUrl: linkedinUrl || db.profile?.linkedinUrl || DEFAULT_PROFILE.linkedinUrl,
     email: email || db.profile?.email || DEFAULT_PROFILE.email,
+    heroTitle: heroTitle !== undefined ? heroTitle : db.profile?.heroTitle,
+    heroSubtitle: heroSubtitle !== undefined ? heroSubtitle : db.profile?.heroSubtitle,
+    contactTitle: contactTitle !== undefined ? contactTitle : db.profile?.contactTitle,
+    contactSubtitle: contactSubtitle !== undefined ? contactSubtitle : db.profile?.contactSubtitle,
   };
   writeDb(db);
   res.json(db.profile);
@@ -345,6 +358,82 @@ app.post("/api/contacts/:id/replied", (req, res) => {
   db.contacts[index].replied = !db.contacts[index].replied;
   writeDb(db);
   res.json(db.contacts[index]);
+});
+
+// --- SKILLS API ---
+app.get("/api/skills", (req, res) => {
+  const db = readDb();
+  res.json(db.skills || []);
+});
+
+app.post("/api/skills", (req, res) => {
+  const db = readDb();
+  db.skills.push(req.body);
+  writeDb(db);
+  res.status(201).json(req.body);
+});
+
+app.put("/api/skills/:name", (req, res) => {
+  const db = readDb();
+  const index = db.skills.findIndex(s => s.name === req.params.name);
+  if (index !== -1) {
+    // Keep original name if modifying others, or update everything
+    db.skills[index] = { ...db.skills[index], ...req.body };
+    writeDb(db);
+    res.json(db.skills[index]);
+  } else {
+    res.status(404).json({ error: "Skill not found" });
+  }
+});
+
+app.delete("/api/skills/:name", (req, res) => {
+  const db = readDb();
+  const index = db.skills.findIndex(s => s.name === req.params.name);
+  if (index !== -1) {
+    db.skills.splice(index, 1);
+    writeDb(db);
+    res.json({ message: "Deleted" });
+  } else {
+    res.status(404).json({ error: "Skill not found" });
+  }
+});
+
+// --- PROJECTS API ---
+app.get("/api/projects", (req, res) => {
+  const db = readDb();
+  res.json(db.projects || []);
+});
+
+app.post("/api/projects", (req, res) => {
+  const db = readDb();
+  const newProject = { ...req.body, id: req.body.id || 'proj-' + Date.now() };
+  db.projects.push(newProject);
+  writeDb(db);
+  res.status(201).json(newProject);
+});
+
+app.put("/api/projects/:id", (req, res) => {
+  const db = readDb();
+  const index = db.projects.findIndex(p => p.id === req.params.id);
+  if (index !== -1) {
+    db.projects[index] = { ...db.projects[index], ...req.body };
+    writeDb(db);
+    res.json(db.projects[index]);
+  } else {
+    res.status(404).json({ error: "Project not found" });
+  }
+});
+
+app.delete("/api/projects/:id", (req, res) => {
+  const db = readDb();
+  const index = db.projects.findIndex(p => p.id === req.params.id);
+  if (index !== -1) {
+    db.projects.splice(index, 1);
+    writeDb(db);
+    res.json({ message: "Deleted" });
+  } else {
+    res.status(404).json({ error: "Project not found" });
+  }
 });
 
 // --- VITE MIDDLEWARE SETUP ---

@@ -68,10 +68,10 @@ export default function ContactHub({ profile }: ContactHubProps) {
             <span>Hubungi Saya</span>
           </div>
           <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Mari Berkolaborasi!
+            {profile.contactTitle || 'Mari Berkolaborasi!'}
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto text-sm">
-            Kirimkan pesan Anda secara langsung. Setiap pesan akan tersimpan aman dan saya akan segera meresponsnya secepat mungkin.
+            {profile.contactSubtitle || 'Kirimkan pesan Anda secara langsung. Setiap pesan akan tersimpan aman dan saya akan segera meresponsnya secepat mungkin.'}
           </p>
         </div>
 

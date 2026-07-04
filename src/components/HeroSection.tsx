@@ -139,9 +139,8 @@ export default function HeroSection({ setActiveTab, profile }: HeroSectionProps)
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 className="font-display text-5xl sm:text-7xl font-extrabold tracking-tight text-white leading-[1.05]"
               >
-                Membangun <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-emerald-400 hover:brightness-110 transition-all">
-                  Karya Digital
+                  {profile.heroTitle || 'Membangun Karya Digital'}
                 </span>
               </motion.h1>
               
@@ -151,7 +150,7 @@ export default function HeroSection({ setActiveTab, profile }: HeroSectionProps)
                 transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="font-display text-xl sm:text-2xl font-semibold text-slate-300 tracking-tight"
               >
-                Melalui Arsitektur Semantik & Animasi Mikro Presisi.
+                {profile.heroSubtitle || 'Melalui Arsitektur Semantik & Animasi Mikro Presisi.'}
               </motion.h2>
             </div>
 

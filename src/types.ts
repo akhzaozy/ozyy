@@ -6,6 +6,10 @@ export interface UserProfile {
   githubUrl: string;
   linkedinUrl: string;
   email: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  contactTitle?: string;
+  contactSubtitle?: string;
 }
 
 export interface BlogPost {
