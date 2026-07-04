@@ -5,7 +5,30 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(), 
+      tailwindcss(),
+      {
+        name: 'block-specific-domain',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            const host = req.headers.host || '';
+            const origin = req.headers.origin || '';
+            const referer = req.headers.referer || '';
+            if (
+              host.includes('akhzafachrozy.my.id') || 
+              origin.includes('akhzafachrozy.my.id') || 
+              referer.includes('akhzafachrozy.my.id')
+            ) {
+              res.statusCode = 403;
+              res.end('Access Blocked: Domain not allowed.');
+              return;
+            }
+            next();
+          });
+        }
+      }
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
