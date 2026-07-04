@@ -58,6 +58,13 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (window.location.pathname === '/admin') {
+      setActiveTab('admin');
+      setIsAdminMode(true);
+      // Clean up the URL visually without reloading
+      window.history.replaceState({}, '', '/');
+    }
+    
     fetchBlogs();
     fetchProfile();
 
@@ -195,7 +202,6 @@ export default function App() {
               <button onClick={() => setActiveTab('skills')} className="hover:text-indigo-400 transition-colors">Keahlian</button>
               <button onClick={() => setActiveTab('projects')} className="hover:text-indigo-400 transition-colors">Proyek</button>
               <button onClick={() => setActiveTab('blog')} className="hover:text-indigo-400 transition-colors">Blog</button>
-              <button onClick={() => setActiveTab('admin')} className="hover:text-indigo-400 transition-colors">Admin Hub</button>
             </div>
 
             <div className="flex items-center gap-2 text-[10px] font-mono bg-slate-900/60 border border-slate-800/80 px-3 py-1.5 rounded-lg">

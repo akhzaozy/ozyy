@@ -159,7 +159,7 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
   // PIN validation
   const handlePinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pin === '1234') {
+    if (pin === '230604') {
       setIsLocked(false);
       setPinError(false);
       fetchContacts();
@@ -375,12 +375,6 @@ export default function AdminPortal({ blogs, onRefreshBlogs, profile, onRefreshP
               Masuk Dashboard
             </button>
           </form>
-
-          <div className="p-3 bg-slate-900/40 border border-slate-800 rounded-xl text-center">
-            <p className="text-[11px] font-mono text-indigo-400">
-              💡 Tip Demo: Masukkan kode PIN <strong className="text-white">1234</strong> untuk membuka portal admin instan.
-            </p>
-          </div>
         </motion.div>
       </section>
     );

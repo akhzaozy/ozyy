@@ -88,50 +88,10 @@ export default function Navigation({ activeTab, setActiveTab, isAdminMode, setIs
               );
             })}
 
-            <div className="h-6 w-[1px] bg-slate-800 mx-2" />
-
-            {/* Admin Toggle */}
-            <button
-              id="nav-btn-admin"
-              onClick={() => {
-                setIsAdminMode(!isAdminMode);
-                if (!isAdminMode) {
-                  setActiveTab('admin');
-                } else {
-                  setActiveTab('home');
-                }
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-medium transition-all duration-200 flex items-center gap-1.5 border ${
-                isAdminMode 
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                  : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:text-emerald-400 hover:border-emerald-500/30'
-              }`}
-            >
-              <ShieldAlert size={14} className={isAdminMode ? 'animate-pulse' : ''} />
-              <span>{isAdminMode ? 'Mode Admin' : 'Admin Hub'}</span>
-            </button>
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-3">
-            <button
-              id="mobile-admin-toggle"
-              onClick={() => {
-                setIsAdminMode(!isAdminMode);
-                if (!isAdminMode) {
-                  setActiveTab('admin');
-                } else {
-                  setActiveTab('home');
-                }
-              }}
-              className={`p-1.5 rounded-lg border text-xs ${
-                isAdminMode 
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                  : 'bg-slate-950/40 border-slate-800 text-slate-400'
-              }`}
-            >
-              <ShieldAlert size={14} />
-            </button>
             <button
               id="mobile-menu-btn"
               onClick={() => setIsOpen(!isOpen)}
